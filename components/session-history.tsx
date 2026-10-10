@@ -4,7 +4,7 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 import { database } from "@/lib/db";
-import { countSessionsByDay } from "@/lib/data/sessions";
+import { countSessionsByDay, localDayKey } from "@/lib/data/sessions";
 import { useStoredQuery } from "@/lib/storage/react";
 
 const chartConfig = {
@@ -20,9 +20,21 @@ function dayLabel(day: string, today: string): string {
 
 export function SessionHistory() {
   const { data, isLoading } = useStoredQuery(database, () => countSessionsByDay("focus", 7));
-  const today = new Date().toLocaleDateString("en-CA");
-  const rows =
-    data?.map(({ day, count }) => ({ label: dayLabel(day, today), sessions: count })) ?? [];
+  if (isLoading) {
+    return (
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Last 7 days</CardTitle>
+          <CardDescription>Counting your sessions…</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[200px]" aria-hidden />
+        </CardContent>
+      </Card>
+    );
+  }
+  const today = localDayKey(new Date());
+  const rows = (data ?? []).map(({ day, count }) => ({ label: dayLabel(day, today), sessions: count }));
   const total = rows.reduce((sum, row) => sum + row.sessions, 0);
 
   return (
@@ -30,14 +42,11 @@ export function SessionHistory() {
       <CardHeader>
         <CardTitle>Last 7 days</CardTitle>
         <CardDescription>
-          {isLoading ? "Counting your sessions…" : `${total} finished focus session${total === 1 ? "" : "s"} this week`}
+          {`${total} finished focus session${total === 1 ? "" : "s"} this week`}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
-          <div className="h-[200px]" aria-hidden />
-        ) : (
-          <ChartContainer config={chartConfig} className="h-[200px] w-full">
+        <ChartContainer config={chartConfig} className="h-[200px] w-full">
             <BarChart data={rows} margin={{ top: 8, left: -24, right: 0, bottom: 0 }}>
               <CartesianGrid vertical={false} />
               <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} minTickGap={0} interval={0} />
