@@ -43,7 +43,7 @@ export function DataPanel() {
         </div>
         {state.kind === "imported" && (
           <p className="text-sm" role="status">
-            Backup loaded: {state.result.added} row{state.result.added === 1 ? "" : "s"} added.
+            Backup loaded: {state.result.rows} row{state.result.rows === 1 ? "" : "s"} added.
           </p>
         )}
         {state.kind === "error" && (
