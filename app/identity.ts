@@ -6,7 +6,7 @@
  */
 export const identity = {
   name: "Focus timer",
-  description: "A pomodoro focus timer: Start, pause and reset a 25-minute session, a short break after, a soft chime when a session ends, and a daily count of finished…",
+  description: "A pomodoro timer for the browser: 25-minute focus sessions, 5-minute breaks, a soft chime and a daily count of finished sessions.",
   accent: "#1d4ed8",
   initial: "F",
 } as const;
