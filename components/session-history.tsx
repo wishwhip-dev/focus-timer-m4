@@ -55,8 +55,7 @@ export function SessionHistory() {
               <Bar dataKey="sessions" fill="var(--color-sessions)" radius={4} isAnimationActive={false} />
             </BarChart>
           </ChartContainer>
-        )}
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
   );
 }
