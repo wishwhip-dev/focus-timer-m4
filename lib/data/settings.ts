@@ -8,7 +8,8 @@ const settings = async () => (await database.ready()).settings;
 
 export async function getSetting(key: string): Promise<string | undefined> {
   const table = await settings();
-  return table.get(key);
+  const row = await table.get(key);
+  return row?.value;
 }
 
 export async function setSetting(key: string, value: string): Promise<void> {
