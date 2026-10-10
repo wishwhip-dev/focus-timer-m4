@@ -11,11 +11,12 @@ const chartConfig = {
   sessions: { label: "Sessions", color: "var(--chart-1)" },
 } satisfies ChartConfig;
 
-/** `2026-10-10` → `Fri 10`, today marked. Formatted in the browser only (the server never has data). */
+/** `2026-10-10` → `Fri 10`, today by name. Formatted in the browser only (the server never has data). */
 function dayLabel(day: string, today: string): string {
+  if (day === today) return "Today";
   const [year, month, date] = day.split("-").map(Number);
   const weekday = new Date(year, month - 1, date).toLocaleDateString("en", { weekday: "short" });
-  return `${weekday} ${date}${day === today ? " · today" : ""}`;
+  return `${weekday} ${date}`;
 }
 
 export function SessionHistory() {
